@@ -25,6 +25,7 @@ export default {
         photo: "https://cdn.acwing.com/media/article/image/2022/08/09/1_1db2488f17-anonymous.png",
       })
       socket = new WebSocket(socketUrl);
+      //console.log(socketUrl);
 
       socket.onopen = () => {
         console.log("connected!");
@@ -54,10 +55,6 @@ export default {
       socket.close();
       store.commit("updateStatus", "matching");
     })
-
   }
 }
 </script>
-
-<style scoped>
-</style>
