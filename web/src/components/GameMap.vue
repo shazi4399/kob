@@ -5,22 +5,24 @@
 </template>
 
 <script>
-import { GameMap } from "@/assets/scripts/GameMap";
-import { ref, onMounted } from 'vue'
-import { useStore } from "vuex";
+import {GameMap} from "@/assets/scripts/GameMap";
+import {ref, onMounted} from 'vue';
+import {useStore} from "vuex";
 
 export default {
+  name: "GameMap",
   setup() {
     const store = useStore();
     let parent = ref(null);
     let canvas = ref(null);
 
+    //组件挂载完需要执行的哪些操作
     onMounted(() => {
       store.commit(
           "updateGameObject",
           new GameMap(canvas.value.getContext('2d'), parent.value, store)
       );
-    });
+    })
 
     return {
       parent,
@@ -37,5 +39,6 @@ div.gamemap {
   display: flex;
   justify-content: center;
   align-items: center;
+  /*background-color: lightblue;*/
 }
 </style>

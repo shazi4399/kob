@@ -1,80 +1,130 @@
 <template>
-  <ContentField>
-    <div class="row justify-content-md-center">
-      <div class="col-3">
-        <form @submit.prevent="register">
-          <div class="mb-3">
-            <label for="username" class="form-label">用户名</label>
-            <input v-model="username" type="text" class="form-control" id="username" placeholder="请输入用户名">
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">密码</label>
-            <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
-          </div>
-          <div class="mb-3">
-            <label for="confirmedPassword" class="form-label">确认密码</label>
-            <input v-model="confirmedPassword" type="password" class="form-control" id="confirmedPassword" placeholder="请再次输入密码">
-          </div>
-          <div class="error-message">{{ error_message }}</div>
-          <button type="submit" class="btn btn-primary">提交</button>
-        </form>
-      </div>
-    </div>
-  </ContentField>
+  <div class="common-layout">
+
+    <el-container>
+
+      <el-main>
+        <h1 style="text-align:center;">用户注册</h1>
+        <el-divider/>
+        <el-row>
+          <el-col :xs="6" :sm="8" :md="9">
+            <div class="grid-content ep-bg-purple"></div>
+          </el-col>
+          <el-col :xs="12" :sm="8" :md="6">
+
+            <el-card>
+              <el-form label-width="120px" label-position="top">
+                <el-form-item label="用户名">
+                  <el-input type="text" v-model="username" placeholder="输入用户名"/>
+                </el-form-item>
+                <el-form-item label="密码">
+                  <el-input type="password" v-model="password" placeholder="输入密码（不少于6位）"/>
+                </el-form-item>
+                <el-form-item label="确定密码">
+                  <el-input type="password" v-model="confirmedPassword" placeholder="再次输入密码（不少于6位）"/>
+                </el-form-item>
+                <p style="color:red" class="error-message">{{ error_message }}</p>
+                <el-form-item>
+                  <el-col :xs="24" :sm="12">
+                    <el-button class="button" type="primary" @click="register" style="width:100%">注册
+                    </el-button>
+                  </el-col>
+                  <el-col :xs="24" :sm="12">
+                    <el-button class="button" @click="cancel" style="width:100%">取消</el-button>
+                  </el-col>
+                </el-form-item>
+              </el-form>
+            </el-card>
+          </el-col>
+          <el-col :xs="6" :sm="8" :md="9">
+            <div class="grid-content ep-bg-purple"></div>
+          </el-col>
+        </el-row>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
-<script>
-import ContentField from '../../../components/ContentField.vue'
-import { ref } from 'vue'
-import router from '../../../router/index'
-import $ from 'jquery'
+<script setup>
+import {h, ref} from 'vue';
+import {useStore} from 'vuex';
+import router from '@/router/index';
+import $ from 'jquery';
+import {ElNotification} from "element-plus";
 
-export default {
-  components: {
-    ContentField
-  },
-  setup() {
-    let username = ref('');
-    let password = ref('');
-    let confirmedPassword = ref('');
-    let error_message = ref('');
+const store = useStore();
+let username = ref('');
+let password = ref('');
+let confirmedPassword = ref('');
+let error_message = ref('');
 
-    const register = () => {
-      $.ajax({
-        url: "http://127.0.0.1:3000/user/account/register/",
-        type: "post",
-        data: {
+const successMessage=()=>{
+  ElNotification({
+    title: '新的开始',
+    message: h('i', { style: 'color: teal' }, '欢迎你的加入'),
+    position: 'bottom-right',
+  })
+}
+
+const register = () => {
+  error_message.value = "";
+  $.ajax({
+    url: "http://127.0.0.1:3000/api/user/account/register/",
+    type: "POST",
+    data: {
+      username: username.value,
+      password: password.value,
+      confirmedPassword: confirmedPassword.value,
+    },
+    success(resp) {
+      if (resp.error_message === "success") {
+        store.dispatch("login", {
           username: username.value,
           password: password.value,
-          confirmedPassword: confirmedPassword.value,
-        },
-        success(resp) {
-          if (resp.error_message === "success") {
-            router.push({name: "user_account_login"});
-          } else {
-            error_message.value = resp.error_message;
-          }
-        },
-      });
+          success() {
+            store.dispatch("getinfo", {
+              success() {
+                router.push({name: 'home'});
+                successMessage();
+              },
+              error() {
+                error_message.value = "系统异常，请稍后重试";
+              },
+            })
+          },
+        });
+      } else {
+        error_message.value = resp.error_message;
+      }
     }
+  })
+};
 
-    return {
-      username,
-      password,
-      confirmedPassword,
-      error_message,
-      register,
-    }
-  }
+const cancel = () => {
+  router.push({name: 'home'});
 }
 </script>
 
 <style scoped>
-button {
-  width: 100%;
+.button {
+  margin-bottom: 10px;
 }
 
-div.error-message {
-  color: red;
+.el-container {
+  height: 100%;
 }
+
+.el-main {
+  height: 100%;
+  background: linear-gradient(200deg, var(--el-color-danger-light-8), var(--el-color-primary-light-5));
+}
+
+.common-layout {
+  height: 100%;
+}
+
+/* .el-card{
+    background-image: url('https://img.zimei.fun/202207101321009.jpg');
+    background-size:100%;
+} */
 </style>

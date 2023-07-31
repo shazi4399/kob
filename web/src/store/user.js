@@ -7,7 +7,7 @@ export default {
         photo: "",
         token: "",
         is_login: false,
-        pulling_info: true,  // 是否正在从云端拉取信息
+        pulling_info:true,
     },
     getters: {
     },
@@ -28,14 +28,14 @@ export default {
             state.token = "";
             state.is_login = false;
         },
-        updatePullingInfo(state, pulling_info) {
-            state.pulling_info = pulling_info;
+        updatePullingInfo(state,pulling_info){
+            state.pulling_info=pulling_info;
         }
     },
     actions: {
         login(context, data) {
             $.ajax({
-                url: "http://127.0.0.1:3000/user/account/token/",
+                url: "http://127.0.0.1:3000/api/user/account/token/",
                 type: "post",
                 data: {
                     username: data.username,
@@ -43,7 +43,7 @@ export default {
                 },
                 success(resp) {
                     if (resp.error_message === "success") {
-                        localStorage.setItem("jwt_token", resp.token);
+                        localStorage.setItem("jwt_token",resp.token);
                         context.commit("updateToken", resp.token);
                         data.success(resp);
                     } else {
@@ -57,7 +57,7 @@ export default {
         },
         getinfo(context, data) {
             $.ajax({
-                url: "http://127.0.0.1:3000/user/account/info/",
+                url: "http://127.0.0.1:3000/api/user/account/info/",
                 type: "get",
                 headers: {
                     Authorization: "Bearer " + context.state.token,
