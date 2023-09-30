@@ -102,7 +102,7 @@ export default {
     const add_bot = () => {
       botUpdate.error_message = "";
       $.ajax({
-        url: ("http://localhost:3000/user/bot/update/"),
+        url: ("https://app5275.acapp.acwing.com.cn/api/user/bot/update/"),
         type: "post",
         data: {
           bot_id: props.row.id,

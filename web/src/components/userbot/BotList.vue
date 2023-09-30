@@ -55,7 +55,7 @@ export default {
 
     const refresh_bots = () => {
       $.ajax({
-        url: ("http://localhost:3000/api/user/bot/getlist/"),
+        url: ("https://app5275.acapp.acwing.com.cn/api/user/bot/getlist/"),
         type: "get",
         headers: {
           Authorization: "Bearer " + store.state.user.token,
@@ -72,7 +72,7 @@ export default {
     const removeBot = (row) => {
       //console.log(row);
       $.ajax({
-        url: ("http://localhost:3000/api/user/bot/remove/"),
+        url: ("https://app5275.acapp.acwing.com.cn/api/user/bot/remove/"),
         type: "post",
         data: {
           bot_id: row.id,

@@ -50,7 +50,7 @@ const state=reactive({
 const pull_page = page => {
   state.current_page = page;
   $.ajax({
-    url: ("http://127.0.0.1:3000/api/ranklist/getlist/"),
+    url: ("https://app5275.acapp.acwing.com.cn/api/ranklist/getlist/"),
     data: {
       page,
     },

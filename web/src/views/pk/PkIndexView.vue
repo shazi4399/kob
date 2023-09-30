@@ -18,7 +18,7 @@ import ResultBoard from "@/components/ResultBoard";
 import { h } from 'vue'
 
 const store = useStore();
-const socketUrl = `ws://localhost:3000/websocket/${store.state.user.token}/`;
+const socketUrl = `wss://app5275.acapp.acwing.com.cn/websocket/${store.state.user.token}/`;
 
 store.commit("updateLoser","none");
 store.commit("updateIsRecord",false);

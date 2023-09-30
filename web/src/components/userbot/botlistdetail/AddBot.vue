@@ -95,7 +95,7 @@ export default {
     const add_bot = () => {
       botAdd.error_message = "";
       $.ajax({
-        url: ("http://localhost:3000/api/user/bot/add/"),
+        url: ("https://app5275.acapp.acwing.com.cn/api/user/bot/add/"),
         type: "post",
         data: {
           title: botAdd.title,
